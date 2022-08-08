@@ -65,7 +65,7 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const token = getToken(authHeader)
   //const jwt: Jwt = decode(token, { complete: true }) as Jwt
 
-  const response = await Axios(jwksUrl)
+  const response = await Axios(jwksUrl);
   const pem = response.data['keys'][0]['x5c'][0]
   const cert = `-----BEGIN CERTIFICATE-----\n${pem}\n-----END CERTIFICATE-----`
 
@@ -75,7 +75,7 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   // You can read more about how to do this here: https://auth0.com/blog/navigating-rs256-and-jwks/
 
 
-  return verify(token,cert,{algorithms: ['RS256']}) as JwtPayload
+  return verify(token,cert,{ algorithms: ['RS256']} ) as JwtPayload
 } 
 catch(e){
   logger.error('Authentication failed', { error: e.message })
@@ -94,3 +94,6 @@ function getToken(authHeader: string): string {
 
   return token
 }
+
+
+

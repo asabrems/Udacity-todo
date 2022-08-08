@@ -4,7 +4,7 @@ import { APIGatewayProxyEvent,APIGatewayProxyHandler, APIGatewayProxyResult } fr
 //import * as middy from 'middy'
 //import { cors, httpErrorHandler } from 'middy/middlewares'
 
-import { deleteTodo } from '../../helpers/todos'
+import { deleteTodo } from '../../businesslogic/todos'
 import { getUserId } from '../utils'
 
 export const handler:APIGatewayProxyHandler =  async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {

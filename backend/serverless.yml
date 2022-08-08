@@ -10,6 +10,29 @@ plugins:
   - serverless-reqvalidator-plugin
   - serverless-aws-documentation
 
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: '20201221'
+
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+
+  tracing:
+    lambda: true
+    apiGateway: true
+
+  # Use these variables in the functions and resouorces section below. For example, 
+  # ${self:provider.environment.ATTACHMENT_S3_BUCKET}
+  environment:
+    PROJECT_NAME: serverless-todoApp
+    TODOS_TABLE: Todos-${self:provider.stage}
+    TODOS_CREATED_AT_INDEX: CreatedAtIndex
+    ATTACHMENT_S3_BUCKET: serverless-bremang-todo-images-${self:provider.stage}
+    SIGNED_URL_EXPIRATION: 3000
+
+
 custom:
   documentation:
     api:
@@ -46,34 +69,17 @@ custom:
             done:
               type: boolean  
 
-provider:
-  name: aws
-  runtime: nodejs12.x
-  lambdaHashingVersion: '20201221'
-
-  stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'us-east-1'}
-
-  tracing:
-    lambda: true
-    apiGateway: true
 
 
 
 
 
 
-  # Use these variables in the functions and resouorces section below. For example, 
-  # ${self:provider.environment.ATTACHMENT_S3_BUCKET}
-  environment:
-    PROJECT_NAME: serverless-todoApp
-    TODOS_TABLE: Todos-${self:provider.stage}
-    TODOS_CREATED_AT_INDEX: CreatedAtIndex
-    ATTACHMENT_S3_BUCKET: serverless-bremang-todo-images-${self:provider.stage}
-    SIGNED_URL_EXPIRATION: 3000
-  logs:
-    # Enable API Gateway logs
-    restApi: true
+
+  
+  # logs:
+  #   # Enable API Gateway logs
+  #   restApi: true
  
     
   # iam:
@@ -228,7 +234,16 @@ resources:
         RestApiId:
           Ref: ApiGatewayRestApi
 
-    
+    GatewayResponseDefault5XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,DELETE,PATCH,PUT'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: ApiGatewayRestApi 
 
     
     
