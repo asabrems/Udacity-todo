@@ -1,11 +1,9 @@
-import { TodosAccess } from '../dataloader/todosAcess'
-//import { AttachmentUtils } from './attachmentUtils';
+import { TodosAccess} from '../dataloader/todosAcess'
+
 import { TodoItem } from '../models/TodoItem'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
-//import { createLogger } from '../utils/logger'
-//import * as uuid from 'uuid'
-//import * as createError from 'http-errors'
+
 import { TodoUpdate } from '../models/TodoUpdate';
 import { parseUserId } from '../auth/utils'
 
@@ -51,7 +49,7 @@ export async function getTodosForUser(token: string): Promise<TodoItem[]>{
 }
 
 //updateTodo
-export function updateTodo(TodoId: string,token: string,updateTodoRequest: UpdateTodoRequest): Promise<TodoUpdate>{
+export function updateTodo(updateTodoRequest: UpdateTodoRequest,TodoId: string,token: string): Promise<TodoUpdate>{
     const userId = parseUserId(token)
-    return todosAccess.updateTodo(TodoId, userId, updateTodoRequest);
+    return todosAccess.updateTodo(updateTodoRequest,TodoId, userId);
 }

@@ -4,7 +4,7 @@ import 'source-map-support/register'
 import { verify} from 'jsonwebtoken'
 import { createLogger } from '../../utils/logger'
 import Axios from 'axios'
-//import { Jwt } from '../../auth/Jwt'
+
 import { JwtPayload } from '../../auth/JwtPayload'
 
 const logger = createLogger('auth');
@@ -56,14 +56,9 @@ export const handler = async (
 
 async function verifyToken(authHeader: string): Promise<JwtPayload> {
 
-  /* if (!authHeader)
-    throw new Error('No authentication header')
-  
-  if (!authHeader.toLocaleLowerCase().startsWith('bearer '))
-    throw new Error('Invalid authentication header') */
   try{
   const token = getToken(authHeader)
-  //const jwt: Jwt = decode(token, { complete: true }) as Jwt
+
 
   const response = await Axios(jwksUrl);
   const pem = response.data['keys'][0]['x5c'][0]

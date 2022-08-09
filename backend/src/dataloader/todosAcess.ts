@@ -1,11 +1,11 @@
 import * as AWS from 'aws-sdk'
-//import * as AWSXRay from 'aws-xray-sdk'
+
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { Types } from 'aws-sdk/clients/s3';
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate';
 
-//import { Types } from 'aws-sdk/clients/s3';
+
 
 // TODO: Implement the dataLayer logic
 
@@ -22,7 +22,7 @@ export class TodosAccess{
     }
 
     async createTodo(todoItem: TodoItem): Promise<TodoItem> {
-        console.log("Creating a todo");
+        console.log("Creating todo");
         const params ={
             TableName: this.todosTable,
             Item: todoItem,
@@ -34,6 +34,7 @@ export class TodosAccess{
     }
 
     async deleteTodo(TodoId: string, UserId:string) {
+        console.log("Deleting todo");
         const params =
         {
             TableName: this.todosTable,
@@ -42,7 +43,8 @@ export class TodosAccess{
                 todoId: TodoId
             }
         }
-            await this.docClient.delete(params).promise();
+            const output = await this.docClient.delete(params).promise();
+            console.log(output)
             return "" as string
         }
 
@@ -64,8 +66,8 @@ export class TodosAccess{
         }
 
 
-        async updateTodo(TodoId: string,UserId: string,todoUpdate: TodoUpdate): Promise<TodoUpdate> {
-        
+        async updateTodo(todoUpdate: TodoUpdate,TodoId: string,UserId: string): Promise<TodoUpdate> {
+            console.log("updated todo");
             const params =
             {
                 TableName: this.todosTable,
@@ -89,6 +91,7 @@ export class TodosAccess{
             }; 
             
             const results = await this.docClient.update(params).promise();
+            console.log(results)
             return results.Attributes as TodoUpdate;
         }
 
@@ -107,6 +110,7 @@ export class TodosAccess{
 
         }
         const result =  await this.docClient.query(params).promise();
+        console.log(result)
         const items = result.Items;
         return items as TodoItem[];
 
